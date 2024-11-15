@@ -14,11 +14,11 @@ namespace sdonboarding.Server.ApplicationTier.Dtos
 
         public int StoreId { get; set; }
 
-        public string? CustomerName { get; }
+        public string? Customer { get; }
 
-        public string? ProductName { get; }
+        public string? Product { get; }
 
-        public string? StoreName { get; }
+        public string? Store { get; }
 
         public SaleDto() { }
         public SaleDto(Sale sale)
@@ -27,9 +27,9 @@ namespace sdonboarding.Server.ApplicationTier.Dtos
             CustomerId = sale.CustomerId;
             ProductId = sale.ProductId;
             StoreId = sale.StoreId;
-            CustomerName = sale.Customer?.Name;
-            ProductName = sale.Product?.Name;
-            StoreName = sale.Store?.Name;
+            Customer = sale.Customer?.Name;
+            Product = sale.Product?.Name;
+            Store = sale.Store?.Name;
             DateSold = sale.DateSold;
         }
     }

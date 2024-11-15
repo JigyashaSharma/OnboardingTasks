@@ -6,7 +6,7 @@ namespace sdonboarding.Server.ApplicationTier.Dtos
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; } = null!;
 
         public string? Address { get; set; }
 
