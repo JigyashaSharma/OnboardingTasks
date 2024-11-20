@@ -11,6 +11,7 @@ import { genericEditDataMethods } from '../../utils/GenericEditDataMethods';
 import { useGetOtherObjectsData } from '../../hooks/commonHooks';
 import { useDispatch } from 'react-redux';
 import { ObjectTypes } from '../../utils/GenericObjects';
+import genericMethods from '../../utils/GenericMethods';
 import { setError } from '../../redux/slices/commonSlice';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
@@ -68,6 +69,7 @@ const EditDataTemplate = ({ type }) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 
+        e.target.setCustomValidity(''); //Needed to remove the custom message in edit form after changing input
         setLocalObject((prevState) => ({
             ...prevState,
             [name]: value,
@@ -118,8 +120,15 @@ const EditDataTemplate = ({ type }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await sendEditRequest();
-        setLocalObject(null);
+        const valid = genericMethods.validateInputValuesOnSubmit(type);
+
+        //Call the parent function for edit request to server
+        if (valid === true) {
+            await sendEditRequest();
+            setLocalObject(null);
+        } else {
+            console.log("Form is invalid");
+        }
     };
 
     if (!localObject) {

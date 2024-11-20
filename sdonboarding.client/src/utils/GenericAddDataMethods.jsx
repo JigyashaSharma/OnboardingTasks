@@ -37,9 +37,9 @@ const genericAddDataMethods = {
             };
 
         } else if (type === ObjectTypes.Sale) {
-            const initObject = { id: 0, customerId:0, customer:'', productId:0, product: '', storeId: '', store: '', dateSold:'' };
-            const labels = { customer: 'Customer', product:'Product', store:'Store', dateSold:'Date Sold' };
-            const formElementType = ['customer', 'product', 'store', 'date'];
+            const initObject = { id: 0, dateSold: '', customerId:0, customer:'', productId:0, product: '', storeId: '', store: '' };
+            const labels = { dateSold: 'Date sold', customer: 'Customer', product:'Product', store:'Store' };
+            const formElementType = ['date', 'customer', 'product', 'store'];
             return {
                 labels, initObject, formElementType
             };

@@ -9,7 +9,7 @@ import {
     toggleAddVisibilitySale, setTotalCountSale, setSales
 } from '../redux/slices/saleSlice';
 import { setError } from '../redux/slices/commonSlice';
-import saleApiServices from '../services/SaleServices';
+import saleApiServices from '../services/saleServices';
 import Message from '../components/Message';
 import DisplayTableTemplate from '../components/UITemplate/DisplayDataTemplate';
 import AddDataTemplate from '../components/UITemplate/AddDataTemplate';

@@ -4,7 +4,7 @@
  */
 
 import { useDispatch, useSelector } from 'react-redux';
-import productApiServices from '../services/ProductServices';
+import productApiServices from '../services/productServices';
 import Message from "../components/Message";
 import DisplayTableTemplate from '../components/UITemplate/DisplayDataTemplate';
 import { useState, useEffect, useCallback } from 'react';

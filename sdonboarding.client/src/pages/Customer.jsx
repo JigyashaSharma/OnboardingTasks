@@ -9,7 +9,7 @@ import {
     toggleAddVisibilityCustomer, setTotalCountCustomer, setCustomers
 } from '../redux/slices/customerSlice';
 import { setError } from '../redux/slices/commonSlice';
-import customerApiServices from '../services/CustomerServices';
+import customerApiServices from '../services/customerServices';
 import Message from '../components/Message';
 import DisplayTableTemplate from '../components/UITemplate/DisplayDataTemplate';
 import AddDataTemplate from '../components/UITemplate/AddDataTemplate';

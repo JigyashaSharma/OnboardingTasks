@@ -8,6 +8,7 @@ import { setEditProduct, toggleEditVisibilityProduct, setDeleteProduct, toggleDe
 import { setEditCustomer, toggleEditVisibilityCustomer, setDeleteCustomer, toggleDeleteVisibilityCustomer } from '../redux/slices/customerSlice';
 import { setEditStore, toggleEditVisibilityStore, setDeleteStore, toggleDeleteVisibilityStore } from '../redux/slices/storeSlice';
 import { setEditSale, toggleEditVisibilitySale, setDeleteSale, toggleDeleteVisibilitySale } from '../redux/slices/saleSlice';
+import { useCallback } from 'react';
 
 /**
  * This hook is used for getting the records fetch by pages from respective stores.
@@ -89,3 +90,54 @@ export const useSetDeleteObject = (type) => {
 
     return setDeleteDisplay;
 };
+
+const sortList = (array, key, orderAsc = true) => {
+    return (
+        [...array].sort((a, b) => typeof a[key] === 'number' ? orderAsc ? a[key] - b[key] : b[key] - a[key] :
+            typeof a[key] === 'string' ? orderAsc ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]) :
+                a[key] instanceof Date ? orderAsc ? a[key] - b[key] : b[key] - a[key] : 0)
+    );
+};
+
+export const useGetSortListAsc = (type) => {
+    const customers = useSelector((state) => state.customerDetails.customers);
+    const products = useSelector((state) => state.productDetails.products);
+    const stores = useSelector((state) => state.storeDetails.stores);
+    const sales = useSelector((state) => state.saleDetails.sales);
+
+    const getSortListAsc = useCallback((key) => {
+        if (type === ObjectTypes.Customer) {
+
+            return sortList(customers, key, true);
+        } else if (type === ObjectTypes.Product) {
+            return sortList(products, key, true);
+        } else if (type === ObjectTypes.Store) {
+            return sortList(stores, key, true);
+        } else if (type === ObjectTypes.Sale) {
+            return sortList(sales, key, true);
+        }
+    }, [type, customers, products, stores, sales]);
+
+    return getSortListAsc;
+};
+
+export const useGetSortListDesc = (type) => {
+    const customers = useSelector((state) => state.customerDetails.customers);
+    const products = useSelector((state) => state.productDetails.products);
+    const stores = useSelector((state) => state.storeDetails.stores);
+    const sales = useSelector((state) => state.saleDetails.sales);
+
+    const getSortListDesc = useCallback((key) => {
+        if (type === ObjectTypes.Customer) {
+            return sortList(customers, key, false);
+        } else if (type === ObjectTypes.Product) {
+            return sortList(products, key, false);
+        } else if (type === ObjectTypes.Store) {
+            return sortList(stores, key, false);
+        } else if (type === ObjectTypes.Sale) {
+            return sortList(sales, key, false);
+        }
+    }, [type, customers, products, stores, sales]);
+
+    return getSortListDesc;
+}

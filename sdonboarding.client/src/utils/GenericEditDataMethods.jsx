@@ -37,8 +37,8 @@ export const genericEditDataMethods = {
             };
 
         } else if (type === ObjectTypes.Sale) {
-            const labels = { customer: 'Customer', product: 'Product', store: 'Store', dateSold: 'DateSold' };
-            const formElementType = ['customer', 'product', 'store', 'date'];
+            const labels = { dateSold: 'DateSold', customer: 'Customer', product: 'Product', store: 'Store' };
+            const formElementType = ['date', 'customer', 'product', 'store'];
             return {
                 labels, formElementType
             };

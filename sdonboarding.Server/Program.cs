@@ -14,7 +14,7 @@ var configuration = new ConfigurationBuilder()
 
 //get connection string to database
 var constring = configuration.GetConnectionString("DefaultConnection");
-var dbName = Environment.GetEnvironmentVariable("DB_NAME_ONBOARDING");
+/*var dbName = Environment.GetEnvironmentVariable("DB_NAME_ONBOARDING");
 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
 
 if (dbName != null)
@@ -33,7 +33,7 @@ if (dbServer != null)
 else
 {
     throw new InvalidOperationException("DB_SERVER environment variable is not set.");
-}
+}*/
 
 // Add services to the container.
 //Add dbcontexxt
@@ -55,10 +55,20 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+if (app.Environment.IsEnvironment("Production") || app.Environment.IsEnvironment("Staging"))
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<IndustryConnectOnboardingContext>();
+        db.Database.Migrate(); // Apply migrations on app startup
+    }
 }
 
 app.UseHttpsRedirection();

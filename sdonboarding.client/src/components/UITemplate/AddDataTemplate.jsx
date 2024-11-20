@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { setError } from '../../redux/slices/commonSlice';
 import { ObjectTypes } from '../../utils/GenericObjects';
 import { CheckIcon } from '@heroicons/react/24/solid';
+import genericMethods from '../../utils/GenericMethods';
 
 const AddDataTemplate = ({ type }) => {
 
@@ -41,7 +42,7 @@ const AddDataTemplate = ({ type }) => {
 
                 //initialize localObject with proper values so that if there is no change triggered(onChange)
                 //we have the default first value to create the sale with
-                setLocalObject((prevState) => ({
+                /*setLocalObject((prevState) => ({
                     ...prevState,
                     customerId: customers[0].id,
                     customer: customers[0].name,
@@ -49,7 +50,7 @@ const AddDataTemplate = ({ type }) => {
                     product: products[0].name,
                     storeId: stores[0].id,
                     store: stores[0].name,
-                }))
+                }))*/
             }
             
         } catch (error) {
@@ -66,7 +67,7 @@ const AddDataTemplate = ({ type }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
+        e.target.setCustomValidity('');
         setLocalObject((prevState) => ({
             ...prevState,
             [name]: value,
@@ -110,13 +111,21 @@ const AddDataTemplate = ({ type }) => {
         handleAddCancel();
     };
 
+    
     //handle the form submit event
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const valid = genericMethods.validateInputValuesOnSubmit(type);
+
         //Call the parent function for edit request to server
-        await handleAddSubmit();
-        setLocalObject(null);
+        if (valid === true) {
+            await handleAddSubmit();
+            setLocalObject(null);
+        } else {
+            console.log("Form is invalid");
+        }
+        
     };
 
      return (
@@ -133,7 +142,7 @@ const AddDataTemplate = ({ type }) => {
                          {/*keys of labels are object keys also that we need for creating object*/}
                         {Object.keys(labels).map((key, index) => {
                             return (
-                                <div key={key}>
+                                <div key={key} className="flex flex-col">
                                     <label htmlFor={key} className='mt-2'>{labels[key]}</label>
                                     {formElementType[index] === 'boolean' ? (
                                         // Render dropdown for boolean fields (like 'active')
@@ -143,6 +152,7 @@ const AddDataTemplate = ({ type }) => {
                                             value={localObject[key].toString()}
                                             onChange={handleActiveChange}
                                             className="w-full px-4 py-2 border rounded text-gray-400"
+                                            required
                                         >
                                             <option value={true}>Active</option>
                                             <option value={false}>Inactive</option>
@@ -158,8 +168,9 @@ const AddDataTemplate = ({ type }) => {
                                                     handleListChange(selectedOption.dataset.id, selectedOption.value, selectedOption.dataset.type);
                                                 }}
                                                 className="w-full px-4 py-2 border rounded text-gray-400"
+                                                required
                                             >
-                                                
+                                                <option value="" disabled></option>
                                                 {localCustomers && localCustomers.map((customer) => {
                                                     console.log("name: ", customer.name)
                                                     return(
@@ -184,7 +195,9 @@ const AddDataTemplate = ({ type }) => {
                                                     handleListChange(selectedOption.dataset.id, selectedOption.value, selectedOption.dataset.type);
                                                     }}
                                                 className="w-full px-4 py-2 border rounded text-gray-400"
-                                            >
+                                                required
+                                                >
+                                                    <option value="" disabled></option>
                                                     {localProducts && localProducts.map((product) => (
                                                     <option key={product.id}
                                                         value={product.name}
@@ -206,7 +219,9 @@ const AddDataTemplate = ({ type }) => {
                                                             handleListChange(selectedOption.dataset.id, selectedOption.value, selectedOption.dataset.type);
                                                         }}
                                                 className="w-full px-4 py-2 border rounded text-gray-400"
+                                                required
                                             >
+                                                <option value="" disabled></option>
                                                 {localStores &&localStores.map((store) => (
                                                     <option key={store.id}
                                                         value={store.name}
@@ -218,18 +233,34 @@ const AddDataTemplate = ({ type }) => {
 
                                             </select>
                                                 ) : formElementType[index] === 'date' ? (
-                                        // Render date input if the field is a date (string in YYYY-MM-DD format)
+                                        // Render date input if the field is a date
                                         <input
                                             type="date"
                                             name={key}
                                             id={key}
                                             value={localObject[key]}
                                             onChange={handleInputChange}
+                                            className="w-1/2 px-4 py-2 border rounded text-gray-400"
+                                            required
+
+                                        />
+                                    ) : formElementType[index] === 'number' ? (
+                                        // Render number input if the field is a number(Price)
+                                        <input
+                                            type="number"
+                                            name={key}
+                                            id={key}
+                                            value={localObject[key]}
+                                            onChange={handleInputChange}
                                             className="w-full px-4 py-2 border rounded text-gray-400"
+                                            step="any" 
+                                            min="0"
+                                            placeholder={`Enter ${labels[key]}`}
+                                            required
 
                                         />
                                     ) : (
-                                        // Render text input for other fields (like 'name', 'price')
+                                        // Render text input for other fields (like 'name', Address)
                                         <input
                                             type="text"
                                             name={key}
@@ -238,6 +269,7 @@ const AddDataTemplate = ({ type }) => {
                                             onChange={handleInputChange}
                                             className="w-full px-4 py-2 border rounded text-gray-400"
                                             placeholder={`Enter ${labels[key]}`}
+                                            required
                                         />
                                     )}
                                 </div>

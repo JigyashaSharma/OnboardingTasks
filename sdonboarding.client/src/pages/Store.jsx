@@ -9,7 +9,7 @@ import {
     toggleAddVisibilityStore, setTotalCountStore, setStores
 } from '../redux/slices/storeSlice';
 import { setError } from '../redux/slices/commonSlice';
-import storeApiServices from '../services/StoreServices';
+import storeApiServices from '../services/storeServices';
 import Message from '../components/Message';
 import DisplayTableTemplate from '../components/UITemplate/DisplayDataTemplate';
 import AddDataTemplate from '../components/UITemplate/AddDataTemplate';
